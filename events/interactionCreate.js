@@ -26,10 +26,10 @@ module.exports = {
             }
         } else if (interaction.isButton()) {
             if (interaction.customId === 'karelia') {
-                const getFood = await getFoodInformation("3087")
+                const getFood = await getFoodInformation("0447")
                 createMenuEmbed(getFood, interaction)
             } else if (interaction.customId === 'uef') {
-                const getFood = await getFoodInformation("3087")
+                const getFood = await getFoodInformation("0433")
                 createMenuEmbed(getFood, interaction)
             } else if (interaction.customId === 'both'){
                 const getFood = await getFoodInformation("3087")

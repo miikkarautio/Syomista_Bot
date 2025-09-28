@@ -2,9 +2,15 @@ const { EmbedBuilder } = require('discord.js');
 
 async function createMenuEmbed(getFood, interaction) {
     await interaction.deferReply();
-    try { 
+    try {
 
-        const justFood = getFood.MenusForDays[0].SetMenus
+        //Jos ruokalistaa ei ole -> return
+        if(getFood.MenusForDays == null || getFood.MenusForDays.length === 0){
+            await interaction.editReply("WOmp womp eipä ollutkaan safkaa saatavilla");
+            return;
+        } 
+
+        const justFood = getFood.MenusForDays[0].SetMenus || []; 
 
         const readyFood = []
 
@@ -14,14 +20,19 @@ async function createMenuEmbed(getFood, interaction) {
             })
         });
 
+        const readyFoodText = readyFood.length > 0 ? readyFood.join("\n") : "EI safkaa, syö kaivonkansi";
+        const foodImage = readyFood.length > 0
+        ? 'https://media.tenor.com/1a6RFI10-oYAAAAe/butter-dog.png' //ButterDog
+        : "https://preview.redd.it/new-pc-ignore-pablo-v0-2r2qz3bu303d1.jpeg?width=1080&auto=webp&s=fa719897ef43fe6ac8436923d26697232270caab" //Pablo
+
         const kareliaEmbed = new EmbedBuilder()
-            .setTitle(`Ruokalista `)
+            .setTitle('Ruokalista')
             .setURL(getFood.RestaurantUrl)
-            .setImage('https://media.tenor.com/1a6RFI10-oYAAAAe/butter-dog.png')
+            .setImage(foodImage)
             .setColor("#FFA500")
             .addFields(
-                { name: getFood.RestaurantName, value: readyFood.join("\n") },
-                { name: "Ruoka-aika", value: getFood.MenusForDays[0].LunchTime }
+                { name: getFood.RestaurantName, value: readyFoodText  },
+                { name: "Ruoka-aika", value: getFood.MenusForDays[0].LunchTime || "MAaan IDK" }
             )
 
         await interaction.editReply({ embeds: [kareliaEmbed] })
